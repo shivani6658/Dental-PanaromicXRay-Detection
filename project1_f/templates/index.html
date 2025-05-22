@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caries Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Caries Detection</h1>
+
+        <form action="/" method="post" enctype="multipart/form-data" id="upload-form">
+            <input type="file" name="file" accept="image/*" id="file-input" required>
+            <button type="submit" id="predict-button">Predict</button>
+        </form>
+
+        <div id="image-preview">
+            <p>No image uploaded yet.</p>
+        </div>
+
+        {% if uploaded_image_url %}
+        <div id="result">
+            <h2>Uploaded Image:</h2>
+            <div class="preview-container">
+                <img src="{{ uploaded_image_url }}" alt="Uploaded Image" width="300">
+
+                <button type="button" id="discard-button" onclick="discardImage()">✖</button>
+            </div>
+            {% if prediction_label %}
+            <h2>Prediction Result:</h2>
+            <p class="{{ 'stroke' if prediction_label == 'Stroke' else 'normal' }}">
+                {{ prediction_label }}
+            </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const imagePreview = document.getElementById('image-preview');
+        const discardButton = document.getElementById('discard-button');
+        const resultContainer = document.getElementById('result');
+        
+        // Display the uploaded image in the preview area
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.innerHTML = `
+                        <div class="preview-container">
+                            <img src="${e.target.result}" alt="Uploaded Image">
+                            <button type="button" id="discard-button" onclick="discardImage()">✖</button>
+                        </div>`;
+                    discardButton.style.display = 'block';  // Show the discard button
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.innerHTML = "<p>No image uploaded yet.</p>";
+                discardButton.style.display = 'none'; // Hide discard button when no image
+            }
+        });
+
+        // Discard the uploaded image and prediction result
+        function discardImage() {
+            // Clear the file input and reset the preview area
+            fileInput.value = "";
+            imagePreview.innerHTML = "<p>No image uploaded yet.</p>";
+            discardButton.style.display = 'none'; // Hide discard button
+
+            // Also clear the result container (image and prediction result)
+            if (resultContainer) {
+                resultContainer.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>

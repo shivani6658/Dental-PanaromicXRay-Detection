@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental X-ray Detection</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 2em;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .model-buttons {
+            margin-top: 20px;
+        }
+        .model-buttons button {
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .upload-form {
+            margin-top: 30px;
+        }
+        input[type="file"] {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to Dental X-ray Detection</h1>
+
+    <div class="container">
+        <h2>Select the model you want to use</h2>
+
+        <div class="model-buttons">
+            <form method="POST" action="/run_model" enctype="multipart/form-data">
+                <button type="submit" name="model_choice" value="yolo">YOLOv5 Model</button>
+                <button type="submit" name="model_choice" value="mobilenet">MobileNet Model</button>
+            </form>
+        </div>
+
+        <h2>Upload your image for detection</h2>
+        <form method="POST" action="/run_model" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <br><br>
+            <input type="submit" value="Run Model">
+        </form>
+    </div>
+
+</body>
+</html>
